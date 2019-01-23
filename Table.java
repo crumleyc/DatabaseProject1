@@ -182,7 +182,8 @@ public class Table
     } // select
 
     /************************************************************************************
-     * Union this table and table2.  Check that the two tables are compatible.
+     * Union this table and table2.  Check that the two tables are compatible. Assumption
+     * all columns are in the same order.
      *
      * #usage movie.union (show)
      *
@@ -195,15 +196,27 @@ public class Table
         if (! compatible (table2)) return null;
 
         List <Comparable []> rows = new ArrayList <> ();
+        rows=tuples;
 
-        //  T O   B E   I M P L E M E N T E D 
+        //is true when there is no duplicate of the tuple in table 2
+        boolean copyRow=true;
+
+        for( int i=0; i<table2.tuples.size() ; i++) {
+            //check if tuple is already in table 1
+            for (int j = 0; j < tuples.size(); j++) {
+                if (tuples.get(j)==table2.tuples.get(i)) {copyRow=false;}
+            }
+            //add row to table 1 if there is no duplicate
+            if(copyRow){ rows.add(table2.tuples.get(i)); }
+            else{ copyRow=true; } //reset
+        }
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // union
 
     /************************************************************************************
      * Take the difference of this table and table2.  Check that the two tables are
-     * compatible.
+     * compatible. Assumption all columns are in the same order.
      *
      * #usage movie.minus (show)
      *
@@ -217,20 +230,17 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
+        //is true when there is no duplicate of the tuple
         boolean copyRow=true;
 
         for( int i=0; i<tuples.size() ; i++) {
+            //check if tuple is in table 2
             for (int j = 0; j < table2.tuples.size(); j++) {
-                if (tuples.get(i) == table2.tuples.get(j)) {
-                   copyRow=false;
-                }
+                if (tuples.get(i)==table2.tuples.get(j)) {copyRow=false;}
             }
-            if(copyRow){
-                rows.add(tuples.get(i));
-            }
-            else{
-                copyRow=true;
-            }
+            //add row to new table row if tuple exists in both tables
+            if(copyRow){ rows.add(tuples.get(i)); }
+            else{ copyRow=true; }
         }
 
         return new Table (name + count++, attribute, domain, key, rows);

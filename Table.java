@@ -140,7 +140,6 @@ public class Table
         String [] newKey    = (Arrays.asList (attrs).containsAll (Arrays.asList (key))) ? key : attrs;
 
         List <Comparable []> rows = new ArrayList <> ();
-	//For Max to do
 
         //  T O   B E   I M P L E M E N T E D 
 
@@ -218,7 +217,21 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D 
+        boolean copyRow=true;
+
+        for( int i=0; i<tuples.size() ; i++) {
+            for (int j = 0; j < table2.tuples.size(); j++) {
+                if (tuples.get(i) == table2.tuples.get(j)) {
+                   copyRow=false;
+                }
+            }
+            if(copyRow){
+                rows.add(tuples.get(i));
+            }
+            else{
+                copyRow=true;
+            }
+        }
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // minus

@@ -141,6 +141,16 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
+        for(int i = 0; i < tuples.size(); i++){
+            //System.out.println(tuples.size());
+            Comparable [] array = new Comparable[attrs.length];
+            for(int j = 0; j < attrs.length; j++){
+                //System.out.println(attrs.length);
+                int attrPos = col(attrs[j]);
+                array[j] = tuples.get(i)[attrPos];
+            }
+            rows.add(array);
+        }
         //  T O   B E   I M P L E M E N T E D 
 
         return new Table (name + count++, attrs, colDomain, newKey, rows);

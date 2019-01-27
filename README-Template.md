@@ -15,39 +15,27 @@ This project uses Java 8. You will need to have the JDK 1.8 installed.
 
 ### Installing
 
-The Java JDK 1.8 has to be downloaded from the Oracle homepage and installed.
+The Java [JDK 1.8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) has to be downloaded from the Oracle homepage and installed.
+
+To confirm that it is installed run 'java -version'. It should out put:
 
 ```
-Give the example
+java version "1.8.0_201"
 ```
 
-And repeat
+## Compilation 
 
-```
-until finished
-```
+To compile the program the following classes are needed: 
+* ArrayUtil
+* KeyType
+* MovieDB
+* Table
 
-End with an example of getting some data out of the system or using it for a little demo
+The class MovieDB is the main class.
 
 ## Running the tests
 
 The program can be tested by running the main class 'MovieDB'. If the operators work the output table show the correct result. 
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Deployment
 
@@ -63,7 +51,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [Git](https://git-scm.com/) for versioning.
 
 ## Authors
 
@@ -80,4 +68,3 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Acknowledgments
 
 * The code framework was distributed by John Miller
-* The class ArrayList was made by Oracle 

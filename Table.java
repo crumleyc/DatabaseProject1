@@ -131,6 +131,7 @@ public class Table
      *
      * @param attributes  the attributes to project onto
      * @return  a table of projected tuples
+     * @author Max Strauss
      */
     public Table project (String attributes)
     {
@@ -140,10 +141,17 @@ public class Table
         String [] newKey    = (Arrays.asList (attrs).containsAll (Arrays.asList (key))) ? key : attrs;
 
         List <Comparable []> rows = new ArrayList <> ();
-	//For Max to do
 
-        //  T O   B E   I M P L E M E N T E D 
-
+        for(int i = 0; i < tuples.size(); i++){
+            Comparable [] array = new Comparable[attrs.length];
+            for(int j = 0; j < attrs.length; j++){
+                int attrPos = col(attrs[j]);
+                array[j] = tuples.get(i)[attrPos];
+            }
+            rows.add(array);
+        }
+        for(int i = 0; i < rows.size(); i++){
+            
         return new Table (name + count++, attrs, colDomain, newKey, rows);
     } // project
 
@@ -183,7 +191,8 @@ public class Table
     } // select
 
     /************************************************************************************
-     * Union this table and table2.  Check that the two tables are compatible.
+     * Union this table and table2.  Check that the two tables are compatible. Assumption
+     * all columns are in the same order.
      *
      * #usage movie.union (show)
      *
@@ -196,15 +205,27 @@ public class Table
         if (! compatible (table2)) return null;
 
         List <Comparable []> rows = new ArrayList <> ();
+        rows=tuples;
 
-        //  T O   B E   I M P L E M E N T E D 
+        //is true when there is no duplicate of the tuple in table 2
+        boolean copyRow=true;
+
+        for( int i=0; i<table2.tuples.size() ; i++) {
+            //check if tuple is already in table 1
+            for (int j = 0; j < tuples.size(); j++) {
+                if (tuples.get(j)==table2.tuples.get(i)) {copyRow=false;}
+            }
+            //add row to table 1 if there is no duplicate
+            if(copyRow){ rows.add(table2.tuples.get(i)); }
+            else{ copyRow=true; } //reset
+        }
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // union
 
     /************************************************************************************
      * Take the difference of this table and table2.  Check that the two tables are
-     * compatible.
+     * compatible. Assumption all columns are in the same order.
      *
      * #usage movie.minus (show)
      *
@@ -218,7 +239,18 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D 
+        //is true when there is no duplicate of the tuple
+        boolean copyRow=true;
+
+        for( int i=0; i<tuples.size() ; i++) {
+            //check if tuple is in table 2
+            for (int j = 0; j < table2.tuples.size(); j++) {
+                if (tuples.get(i)==table2.tuples.get(j)) {copyRow=false;}
+            }
+            //add row to new table row if tuple exists in both tables
+            if(copyRow){ rows.add(tuples.get(i)); }
+            else{ copyRow=true; }
+        }
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // minus

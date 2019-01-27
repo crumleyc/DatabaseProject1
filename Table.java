@@ -290,7 +290,11 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D 
+        /*THings to do:
+        *Check to see if there exist any same occuring attibutes across the two tables
+        *Grab the column positions
+        *Take all rows from table 1 and add the rows (minus the primary keys of table 2)
+        */
 
         // FIX - eliminate duplicate columns
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
@@ -498,8 +502,22 @@ public class Table
      */
     private boolean typeCheck (Comparable [] t)
     { 
-        //  T O   B E   I M P L E M E N T E D 
+        //Checking for the case the input tuple doesnt match the table's domain
+        if( ! (domain.length == t.length)) return false;
 
+        
+        for(int i = 0; i < t.length; i++) {
+
+            if( ! (domain[i].isInstance(t[i]) )) { 
+                out.println("False");
+                //return false; 
+            } else {
+                out.println("True");
+            }
+            
+        }
+        
+        
         return true;
     } // typeCheck
 

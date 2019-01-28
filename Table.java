@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+
 import static java.lang.Boolean.*;
 import static java.lang.System.out;
 
@@ -268,7 +269,54 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D 
+        int [] t_attrsPos = new int [t_attrs.length];
+        int [] u_attrsPos = new int [u_attrs.length];
+
+        //Grabbing the collumn postions of the keys from each table.
+        for(int i = 0; i < t_attrs.length; i++) { t_attrsPos[i] = col(t_attrs[i]); }
+
+        for(int i = 0; i < u_attrs.length; i++) { u_attrsPos[i] = table2.col(u_attrs[i]); }
+
+        
+        
+        //check domains
+        for(int i = 0; i < t_attrs.length; i++) {
+            String d1 = domain[t_attrsPos[i]].getName();
+            String d2 = table2.domain[u_attrsPos[i]].getName();
+            if ( ! d1.equals(d2)) {
+                out.println("The domain of attribute " + attribute[t_attrsPos[i]] + " is " + d1);
+                out.println("The domain of attribute " + table2.attribute[u_attrsPos[i]] + " is " + d2);
+                out.println("These domain dont match!");
+                return null;
+            }
+        }        
+
+        //Creating the new tuples 
+        for (Comparable[] tup1 : tuples) {
+            for(Comparable[] tup2 : table2.tuples) {
+
+                //int to be used to assure that each column is matched
+                int match = 0;
+
+                for(int k = 0; k < t_attrs.length; k++) {
+                    if( tup1[t_attrsPos[k]] == tup2[u_attrsPos[k]]) {match++;}
+                }
+
+                if(match == t_attrs.length) {
+                    //Creating new tuple
+                    Comparable[] row = ArrayUtil.concat(tup1,tup2);
+                    rows.add(row);
+                }
+                  
+            }
+        }
+        /*
+        //check for duplicate names
+        String[] temp_attr2 = new String [u_attrs.length];
+        for(int i = 0; i < u_attrs.length; i++) {
+            temp_attr2[i] = attributes2[i] + "2";
+        }
+        */
 
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
                                           ArrayUtil.concat (domain, table2.domain), key, rows);
@@ -295,6 +343,16 @@ public class Table
         *Grab the column positions
         *Take all rows from table 1 and add the rows (minus the primary keys of table 2)
         */
+
+        int [] t_keysPos = new int [attribute.length];
+        int [] u_keyPos = new int [table2.attribute.length];
+
+        //Grabbing the column positions of the colomn name in common
+        for (int i = 0; i > table2.attribute.length; i++) {
+
+            t_keysPos[i] = col(table2.attribute[i]);
+
+        }
 
         // FIX - eliminate duplicate columns
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),

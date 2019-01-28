@@ -150,8 +150,14 @@ public class Table
             }
             rows.add(array);
         }
-        for(int i = 0; i < rows.size(); i++){
-            
+        for(int x = 0; x < rows.size(); x++){
+            for(int y = x+1; y < rows.size()-1; y++){
+                if(rows.get(x).equals(rows.get(y))){
+                    rows.remove(y);
+                    x -= 1;
+                }
+            }
+        }
         return new Table (name + count++, attrs, colDomain, newKey, rows);
     } // project
 
@@ -178,14 +184,18 @@ public class Table
      *
      * @param keyVal  the given key value
      * @return  a table with the tuple satisfying the key predicate
+     * @author Max Strauss
      */
     public Table select (KeyType keyVal)
     {
         out.println ("RA> " + name + ".select (" + keyVal + ")");
-
         List <Comparable []> rows = new ArrayList <> ();
-
-        //  T O   B E   I M P L E M E N T E D 
+        
+        for(int i = 0; i < tuples.size(); i++){
+            if(tuples.get(i).equals(index.get(keyVal))){
+                rows.add(tuples.get(i));
+            }
+        }
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // select

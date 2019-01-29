@@ -338,21 +338,68 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        /*THings to do:
-        *Check to see if there exist any same occuring attibutes across the two tables
-        *Grab the column positions
-        *Take all rows from table 1 and add the rows (minus the primary keys of table 2)
-        */
+        //Getting the number of duplicate columns
+        int numDupCol = 0;
+        for(int i = 0; i< table2.attribute.length; i++) {
+            if( ! (col(table2.attribute[i]) == -1)) {
+                numDupCol++;
+            }
+            
+        }
 
-        int [] t_keysPos = new int [attribute.length];
-        int [] u_keyPos = new int [table2.attribute.length];
+        //storage for column positions of duplicate 
+        int [] t_keysPos = new int [numDupCol];
+        int [] u_keysPos = new int [numDupCol];
 
-        //Grabbing the column positions of the colomn name in common
-        for (int i = 0; i > table2.attribute.length; i++) {
+        
+        //Grabbing the collumn postions of the keys from each table.
+        for (int i = 0; i > table2.attribute.length; i++) { t_keysPos[i] = col(table2.attribute[i]); }
+        for(int i = 0; i < attribute.length; i++) { u_keysPos[i] = table2.col(attribute[i]); }
 
-            t_keysPos[i] = col(table2.attribute[i]);
+        if(numDupCol == 0) {
+            //cross product
+        } else if(0 < numDupCol && numDupCol < attribute.length) {
+            //Checking domains 
+            
+            for(int i = 0; i < t_keysPos.length; i++) {
+                String d1 = domain[t_keysPos[i]].getName();
+                String d2 = table2.domain[u_keysPos[i]].getName();
+                if ( ! d1.equals(d2)) {
+                    out.println("The domain of attribute " + attribute[t_keysPos[i]] + " is " + d1);
+                    out.println("The domain of attribute " + table2.attribute[u_keysPos[i]] + " is " + d2);
+                    out.println("These domain dont match!");
+                    return null;
+                }
+            }
+
+                //Creating the new tuples 
+            for (Comparable[] tup1 : tuples) {
+                for(Comparable[] tup2 : table2.tuples) {
+
+                    //int to be used to assure that each column is matched
+                    int match = 0;
+
+                    for(int k = 0; k < t_keysPos.length; k++) {
+                        if( tup1[t_keysPos[k]] == tup2[u_keysPos[k]]) {match++;}
+                    }
+
+                    if(match == t_keysPos.length) {
+
+                        //Comparable[] new_
+                        //Creating new tuple
+                        //Comparable[] row = ArrayUtil.concat(tup1,tup2);
+                        //rows.add(row);
+                    }
+                    
+                }
+            }
+
+        } else {
+            // numDupCols == 6
 
         }
+
+        
 
         // FIX - eliminate duplicate columns
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
@@ -567,11 +614,19 @@ public class Table
         for(int i = 0; i < t.length; i++) {
 
             if( ! (domain[i].isInstance(t[i]) )) { 
-                out.println("False");
-                //return false; 
-            } else {
-                out.println("True");
-            }
+                
+                //checking for the case the attribute is a double but is supposed to be a float. 
+                if( t[i] instanceof Double){
+                    if(domain[i].getName().equals("Float")) {
+                        return true;
+                    }
+
+                } else {
+                    out.println("Incorrect entry for the given domain for " + attribute[i]);
+                    return false;
+                }
+                
+            } 
             
         }
         

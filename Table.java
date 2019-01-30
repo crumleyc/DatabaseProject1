@@ -3,6 +3,9 @@
  * @file  Table.java
  *
  * @author   John Miller
+ * @author   Alexander Stein
+ * @author   Caleb Crumley
+ * @author   @author Max Strauss
  */
 
 import java.io.*;
@@ -132,6 +135,7 @@ public class Table
      *
      * @param attributes  the attributes to project onto
      * @return  a table of projected tuples
+     * @author Max Strauss
      */
     public Table project (String attributes)
     {
@@ -142,8 +146,22 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D 
-
+        for(int i = 0; i < tuples.size(); i++){
+            Comparable [] array = new Comparable[attrs.length];
+            for(int j = 0; j < attrs.length; j++){
+                int attrPos = col(attrs[j]);
+                array[j] = tuples.get(i)[attrPos];
+            }
+            rows.add(array);
+        }
+        for(int x = 0; x < rows.size(); x++){
+            for(int y = x+1; y < rows.size()-1; y++){
+                if(rows.get(x).equals(rows.get(y))){
+                    rows.remove(y);
+                    x -= 1;
+                }
+            }
+        }
         return new Table (name + count++, attrs, colDomain, newKey, rows);
     } // project
 
@@ -170,14 +188,18 @@ public class Table
      *
      * @param keyVal  the given key value
      * @return  a table with the tuple satisfying the key predicate
+     * @author Max Strauss
      */
     public Table select (KeyType keyVal)
     {
         out.println ("RA> " + name + ".select (" + keyVal + ")");
-
         List <Comparable []> rows = new ArrayList <> ();
-
-        //  T O   B E   I M P L E M E N T E D 
+        
+        for(int i = 0; i < tuples.size(); i++){
+            if(tuples.get(i).equals(index.get(keyVal))){
+                rows.add(tuples.get(i));
+            }
+        }
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // select
@@ -187,6 +209,8 @@ public class Table
      * all columns are in the same order.
      *
      * #usage movie.union (show)
+     *
+     * @author   Alexander Stein
      *
      * @param table2  the rhs table in the union operation
      * @return  a table representing the union
@@ -220,6 +244,8 @@ public class Table
      * compatible. Assumption all columns are in the same order.
      *
      * #usage movie.minus (show)
+     *
+     * @author   Alexander Stein
      *
      * @param table2  The rhs table in the minus operation
      * @return  a table representing the difference
@@ -438,9 +464,7 @@ public class Table
                     Comparable[] testTup = extract(tup2, attribute);
                     
                     boolean addRow = true;
-                    out.println("table 1: " + tup1[0]);
-                    out.println("tuple2: " + tup2[0]);
-                    out.println("table 2: " + testTup[0]);
+                    
 
                     for(int i = 0; i < attribute.length; i++) {
                         if(!(testTup[i] == tup1[i])) {

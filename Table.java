@@ -187,6 +187,8 @@ public class Table
      *
      * #usage movie.union (show)
      *
+     * @author   Alexander Stein
+     *
      * @param table2  the rhs table in the union operation
      * @return  a table representing the union
      */
@@ -219,6 +221,8 @@ public class Table
      * compatible. Assumption all columns are in the same order.
      *
      * #usage movie.minus (show)
+     *
+     * @author   Alexander Stein
      *
      * @param table2  The rhs table in the minus operation
      * @return  a table representing the difference

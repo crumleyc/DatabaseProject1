@@ -355,10 +355,40 @@ public class Table
         //Grabbing the collumn postions of the keys from each table.
         for (int i = 0; i > table2.attribute.length; i++) { t_keysPos[i] = col(table2.attribute[i]); }
         for(int i = 0; i < attribute.length; i++) { u_keysPos[i] = table2.col(attribute[i]); }
+        
+        //Checking for special case
+        boolean intersection = false;
+        if(table2.attribute.length==attribute.length){
+            if(numDupCol == attribute.length){
+                intersection = true;
+            }
+        }
+        //Pulling the non common attributes and their domains
+        String[] newAttr = new String[table2.attribute.length - numDupCol];
+        Class[] newDomain = new Class[table2.attribute.length - numDupCol];
+        for(int i = 0; i<newAttr.length; i++){
+            for(int j = 0; j <attribute.length; j++) {
+                for(int k = 0; k < table2.attribute.length; k++){
+                    if(!(attribute[j].equals(table2.attribute[k]))){
+                        newAttr[i] = table2.attribute[k];
+                        newDomain[i] = table2.domain[k];
+                    }
+                }
+            }
+        }
 
         if(numDupCol == 0) {
-            //cross product
-        } else if(0 < numDupCol && numDupCol < attribute.length) {
+            
+            for (Comparable[] tup1 : tuples) {
+                for (Comparable[] tup2 : table2.tuples){
+                    Comparable[] newTup2 = extract(tup2, newAttr);
+                    rows.add(ArrayUtil.concat(tup1,newTup2));
+                }
+
+                return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
+                                          ArrayUtil.concat (domain, table2.domain), key, rows);
+            }
+        } else if(! intersection) {
             //Checking domains 
             
             for(int i = 0; i < t_keysPos.length; i++) {
@@ -385,23 +415,43 @@ public class Table
 
                     if(match == t_keysPos.length) {
 
-                        //Comparable[] new_
-                        //Creating new tuple
-                        //Comparable[] row = ArrayUtil.concat(tup1,tup2);
-                        //rows.add(row);
+                        rows.add(ArrayUtil.concat(tup1, extract(tup2, newAttr)));
                     }
                     
                 }
             }
 
-        } else {
-            // numDupCols == 6
+            return new Table (name + count++, ArrayUtil.concat (attribute, newAttr),
+                                          ArrayUtil.concat (domain, newDomain), key, rows);
+
+
+
+        } else if(intersection) {
+            for (Comparable[] tup1 : tuples) {
+                for(Comparable[] tup2: table2.tuples){
+                    Comparable[] testTup = table2.extract(tup2, attribute);
+                    
+                    boolean addRow = true;
+                    out.println(tup1[0]);
+                    out.println(testTup[0]);
+                    for(int i = 0; i < attribute.length; i++) {
+                        if(!(testTup[i] == tup1[i])) {
+                            addRow = false;
+                        }
+                    }
+                    if(addRow){rows.add(testTup);}
+                    
+                }
+            }
+
+            return new Table (name + count++, attribute, domain, key, rows);
 
         }
 
+
         
 
-        // FIX - eliminate duplicate columns
+        
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
                                           ArrayUtil.concat (domain, table2.domain), key, rows);
     } // join

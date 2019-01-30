@@ -1,6 +1,6 @@
 # Project 1: Realtional Algebra Operators
 
-This project contains various operators of relational algebra implemented in Java 8. Completed vor CSCIX370 Database Management at the Univsersity of Georgia.
+This project contains various operators of relational algebra implemented in Java 8. Completed for CSCIX370 Database Management at the Univsersity of Georgia.
 
 In the project the relational algebra operators are demonstrated on a database of movie details. Therefore the code was given by the instructor except the operators select, project, union, minus, equijoin and natural join were left to code. 
 
@@ -31,15 +31,17 @@ To compile the program the following classes are needed:
 * MovieDB
 * Table
 
+On a Unix bash shell, the command to compile is as follows:
+"$ javac MovieBD.java Table.java" or simply "$ javac *.java" when in the project directory.
+
 The class MovieDB is the main class.
+
 
 ## Running the tests
 
-The program can be tested by running the main class 'MovieDB'. If the operators work the output table show the correct result. 
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+The program can be tested by running the main class 'MovieDB'. If the operators work the output table show the correct result.
+To run the program run the following command:
+"$ java MovieDB"
 
 ## Built With
 
@@ -63,7 +65,7 @@ We use [Git](https://git-scm.com/) for versioning.
 
 * The operators union and minus assume that the columns of the tables are in the same order
 * The project operator uses the remaining attributes as new primary key and removes duplicates.
-* etc
+* The select operator returns AT MOST one tuple.
 
 ## Acknowledgments
 

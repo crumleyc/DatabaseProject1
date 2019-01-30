@@ -251,7 +251,7 @@ public class Table
      * Join this table and table2 by performing an "equi-join".  Tuples from both tables
      * are compared requiring attributes1 to equal attributes2.  Disambiguate attribute
      * names by append "2" to the end of any duplicate attribute name.
-     *
+     * @author Caleb Crumley
      * #usage movie.join ("studioNo", "name", studio)
      *
      * @param attribute1  the attributes of this table to be compared (Foreign Key)
@@ -310,13 +310,16 @@ public class Table
                   
             }
         }
-        /*
-        //check for duplicate names
-        String[] temp_attr2 = new String [u_attrs.length];
-        for(int i = 0; i < u_attrs.length; i++) {
-            temp_attr2[i] = attributes2[i] + "2";
+        
+        String[] newAttr = table2.attribute;
+        for(int i = 0; i < attribute.length; i++) {
+            for(int j = 0; j < table2.attribute.length; j++) {
+                if(attribute[i].equals(table2.attribute[j])){
+                    newAttr[j] = table2.attribute[j] + "2";
+                }
+            }
+            
         }
-        */
 
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
                                           ArrayUtil.concat (domain, table2.domain), key, rows);
@@ -326,7 +329,7 @@ public class Table
      * Join this table and table2 by performing an "natural join".  Tuples from both tables
      * are compared requiring common attributes to be equal.  The duplicate column is also
      * eliminated.
-     *
+     * @author Caleb Crumley
      * #usage movieStar.join (starsIn)
      *
      * @param table2  the rhs table in the join operation
@@ -378,7 +381,7 @@ public class Table
         }
 
         if(numDupCol == 0) {
-            
+            //CrossProduct
             for (Comparable[] tup1 : tuples) {
                 for (Comparable[] tup2 : table2.tuples){
                     Comparable[] newTup2 = extract(tup2, newAttr);
@@ -427,13 +430,18 @@ public class Table
 
 
         } else if(intersection) {
+
+            //Intersection
             for (Comparable[] tup1 : tuples) {
+                
                 for(Comparable[] tup2: table2.tuples){
-                    Comparable[] testTup = table2.extract(tup2, attribute);
+                    Comparable[] testTup = extract(tup2, attribute);
                     
                     boolean addRow = true;
-                    out.println(tup1[0]);
-                    out.println(testTup[0]);
+                    out.println("table 1: " + tup1[0]);
+                    out.println("tuple2: " + tup2[0]);
+                    out.println("table 2: " + testTup[0]);
+
                     for(int i = 0; i < attribute.length; i++) {
                         if(!(testTup[i] == tup1[i])) {
                             addRow = false;

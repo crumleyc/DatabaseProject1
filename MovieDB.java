@@ -107,25 +107,26 @@ class MovieDB
         Table t_select = movie.select (t -> t[movie.col("title")].equals ("Star_Wars") &&
                                             t[movie.col("year")].equals (1977));
         t_select.print ();
+        
 
         //--------------------- select: <
 
         out.println ();
         Table t_select2 = movie.select (t -> (Integer) t[movie.col("year")] < 1980);
         t_select2.print ();
-
+        
         //--------------------- indexed select: key
 
         out.println ();
         Table t_iselect = movieStar.select (new KeyType ("Harrison_Ford"));
         t_iselect.print ();
-
+        
         //--------------------- union: movie UNION cinema
-
+        
         out.println ();
         Table t_union = movie.union (cinema);
         t_union.print ();
-
+        
         //--------------------- minus: movie MINUS cinema
 
         out.println ();

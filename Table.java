@@ -5,7 +5,7 @@
  * @author   John Miller
  * @author   Alexander Stein
  * @author   Caleb Crumley
- * @author   @author Max Strauss
+ * @author   Max Strauss
  */
 
 import java.io.*;
@@ -226,7 +226,7 @@ public class Table
         //is true when there is no duplicate of the tuple in table 2
         //is true when there is no duplicate of the tuple in table 2
         boolean copyRow=true;
-        
+
         //Adding all rows from table 1.
         for (Comparable[] tup1 : tuples) {
             rows.add(tup1);

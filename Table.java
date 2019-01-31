@@ -219,12 +219,18 @@ public class Table
     {
         out.println ("RA> " + name + ".union (" + table2.name + ")");
         if (! compatible (table2)) return null;
-
+        
         List <Comparable []> rows = new ArrayList <> ();
-        rows=tuples;
-
+        
+        
+        //is true when there is no duplicate of the tuple in table 2
         //is true when there is no duplicate of the tuple in table 2
         boolean copyRow=true;
+        
+        //Adding all rows from table 1.
+        for (Comparable[] tup1 : tuples) {
+            rows.add(tup1);
+        }
 
         for( int i=0; i<table2.tuples.size() ; i++) {
             //check if tuple is already in table 1
@@ -236,6 +242,8 @@ public class Table
             else{ copyRow=true; } //reset
         }
 
+
+        
         return new Table (name + count++, attribute, domain, key, rows);
     } // union
 
